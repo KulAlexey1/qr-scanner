@@ -1,0 +1,18 @@
+<header>
+    <mat-toolbar color="primary" class="header-menu">
+        <span>QR</span>
+
+        <div>
+            <button mat-button routerLink="scan" routerLinkActive="mat-accent">
+                <mat-icon>book</mat-icon> Сканировать
+            </button>
+            <button mat-button routerLink="generate" routerLinkActive="mat-accent">
+                <mat-icon>book</mat-icon> Сгенерировать
+            </button>
+        </div>
+    </mat-toolbar>
+</header>
+
+<section class="body">
+    <router-outlet></router-outlet>
+</section>

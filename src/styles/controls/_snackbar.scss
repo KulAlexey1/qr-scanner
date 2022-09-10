@@ -1,0 +1,29 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'src/styles/_theme-mixins.scss' as theme-mixins;
+
+@mixin color($theme, $color) {
+    @include theme-mixins.color($theme, $color);
+
+    .mat-button {
+        @include theme-mixins.color($theme, $color, '100');
+    }
+}
+
+@mixin theme($theme) {
+    .mat-snack-bar-container {
+        &.success {
+            @include color($theme, 'accent');
+        }
+        &.info {
+            @include color($theme, 'primary');
+        }
+        &.error {
+            @include color($theme, 'warn');
+        }
+
+        .mat-simple-snack-bar-content {
+            @include theme-mixins.typography($theme, 'body-2');
+        }
+    }
+}

@@ -1,0 +1,19 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme, $color, $hue: 'default') {
+    $color-config: mat.get-color-config($theme);
+    @if $color-config != null {
+        $color-palette: map.get($color-config, $color);
+
+        background-color: map.get($color-palette, $hue);
+        color: map.get($color-palette, $hue + '-contrast');
+    }
+}
+
+@mixin typography($theme, $level) {
+    $typography-config: mat.get-typography-config($theme);
+    @if $typography-config != null {
+        @include mat.typography-level($typography-config, $level);
+    }
+}

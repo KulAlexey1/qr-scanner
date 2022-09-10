@@ -1,0 +1,27 @@
+:host {
+    padding: 25px 0;
+    align-self: center;
+}
+
+.header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.header, .camera-video {
+    margin-bottom: 15px;
+}
+
+.camera-video {
+    display: flex;
+    width: 480px;
+    height: 360px;
+    background: black;
+}
+
+.fields {
+    .data {
+        width: 100%;
+    }
+}

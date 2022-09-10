@@ -1,0 +1,26 @@
+<section class="header">
+    <mat-slide-toggle color="accent" [(ngModel)]="frontCamera">Фронтальная камера</mat-slide-toggle>
+    <button mat-raised-button color="accent" class="align-center" (click)="onRefreshClick()">
+        <mat-icon>refresh</mat-icon>
+        Обновить
+    </button>
+</section>
+
+<section class="camera-video" appearance="outline">
+    <video #cameraVideo autoplay width="100%"></video>
+    <canvas #cameraCanvas style="display: none"></canvas>
+</section>
+
+<section class="fields">
+    <mat-form-field appearance="outline" class="data">
+        <mat-label>Данные</mat-label>
+        <textarea matInput  [(ngModel)]="scanData"></textarea>
+        <button
+                matSuffix
+                mat-icon-button
+                matTooltip="Скопировать в буфер обмена"
+                [cdkCopyToClipboard]="scanData">
+            <mat-icon>content_copy</mat-icon>
+        </button>
+    </mat-form-field>
+</section>

@@ -1,0 +1,11 @@
+:host {
+  padding: 25px 0;
+  align-self: center;
+}
+
+.header {
+  padding-bottom: 15px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}/*# sourceMappingURL=scanner.component.css.map */
