@@ -1,5 +1,4 @@
 :host {
-    padding: 25px 0;
     align-self: center;
 }
 
@@ -15,13 +14,11 @@
 
 .camera-video {
     display: flex;
-    max-width: 480px;
-    height: 360px;
-    background: black;
+    background: black;    
+    min-width: 336px;
+    min-height: 252px;
 }
 
-.fields {
-    .data {
-        width: 100%;
-    }
+.fields .data {
+    width: 100%;
 }
