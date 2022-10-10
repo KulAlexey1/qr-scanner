@@ -15,7 +15,7 @@
 
 .camera-video {
     display: flex;
-    width: 480px;
+    max-width: 480px;
     height: 360px;
     background: black;
 }
