@@ -1,3 +1,5 @@
+@use 'src/styles/colors.scss' as colors;
+
 :host {
     align-self: center;
 }
@@ -8,17 +10,64 @@
     align-items: center;
 }
 
-.header, .camera-video {
+.header,
+.camera-video {
     margin-bottom: 15px;
+}
+
+.fields {
+    .data-field {
+        display: flex;
+
+        .data {
+            flex-grow: 1;
+        }
+
+        .copy-btn {
+            margin-left: 5px;
+        }
+    }
 }
 
 .camera-video {
     display: flex;
-    background: black;    
-    min-width: 336px;
-    min-height: 252px;
+    background: black;
+    position: relative;
 }
 
-.fields .data {
-    width: 100%;
+@media only screen and (min-width: 375px) {
+    .camera-video {
+        width: 320px;
+        height: 240px;
+    }
+}
+
+@media only screen and (min-width: 540px) {
+    .camera-video {
+        width: 480px;
+        height: 360px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .camera-video {
+        width: 640px;
+        height: 480px;
+    }
+}
+
+.camera-video.scanning::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: inherit;
+    height: 2px;
+    background: linear-gradient(to bottom, colors.$scan-line-background, transparent);
+    animation: scanning 2s linear infinite;
+}
+
+@keyframes scanning {
+    100% {
+        top: 100%;
+    }
 }

@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @use 'src/styles/custom-theme.scss' as custom-theme;
 @use 'src/styles/controls/_snackbar.scss' as snackbar;
+@use 'src/styles/controls/_button.scss' as button;
 
 @include mat.core();
 @include mat.all-component-themes(custom-theme.$custom-theme);
@@ -9,11 +10,3 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mat-button-base.align-center {
-    .mat-button-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 3px;
-    }
-}

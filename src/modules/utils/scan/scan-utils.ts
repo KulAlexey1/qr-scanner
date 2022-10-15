@@ -3,7 +3,8 @@ import jsQR from 'jsqr';
 export class ScanUtils {
     public static scanFromVideo(
         videoElement: HTMLVideoElement,
-        canvasElement: HTMLCanvasElement
+        canvasElement: HTMLCanvasElement,
+        willScanFrequently: boolean
     ) : string | undefined {
         const videoWidth = videoElement.clientWidth;
         const videoHeight = videoElement.clientHeight;
@@ -11,7 +12,7 @@ export class ScanUtils {
         canvasElement.width  = videoWidth;
         canvasElement.height = videoHeight;
     
-        const canvas2dContext = canvasElement.getContext('2d') as CanvasRenderingContext2D;
+        const canvas2dContext = canvasElement.getContext('2d', { willReadFrequently: willScanFrequently }) as CanvasRenderingContext2D;
         canvas2dContext.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
         
         const imageData = canvas2dContext.getImageData(0, 0, videoWidth, videoHeight);

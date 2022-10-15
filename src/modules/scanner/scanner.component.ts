@@ -1,8 +1,8 @@
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -36,6 +36,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
     @ViewChild('cameraCanvas', {static: true}) cameraCanvasRef: ElementRef<HTMLCanvasElement>;
 
     frontCamera = true;
+    scanning: boolean;
     scanData: string;
     cameraStream: MediaStream;
 
@@ -56,7 +57,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
         }
     }
 
-    onRefreshClick() {
+    onRefresh() {
         this.startScanning();
     }
 
@@ -67,7 +68,16 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
         this.playVideoSubscription = this.playVideoFromCamera().pipe(
             shareReplay(1),
-            map(x => this.scan()),
+            map(x => {
+                this.scanning = x.active;
+
+                return this.scan();
+            }),
+            catchError((err) => {
+                this.scanning = false;
+
+                throw err;
+            }),
             delayWhen((scanResult) =>
                 scanResult ? interval(5000) : interval(300)),
             repeat()
@@ -76,7 +86,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
     private scan(): string {
         const scanResult = ScanUtils.scanFromVideo(this.cameraVideoRef.nativeElement,
-            this.cameraCanvasRef.nativeElement);
+            this.cameraCanvasRef.nativeElement, true);
 
         if (scanResult) {
             this.scanData = scanResult;
@@ -101,7 +111,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
                     Проверьте разрешение на доступ к камере
                 `);
 
-                return of(err);
+                throw err;
             })
         )
     }
