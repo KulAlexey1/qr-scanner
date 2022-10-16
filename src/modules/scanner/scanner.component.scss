@@ -36,23 +36,47 @@
 }
 
 @media only screen and (min-width: 375px) {
+    $height: 240px;
+
     .camera-video {
         width: 320px;
-        height: 240px;
+        height: $height;
+    }
+
+    @keyframes scanning {
+        100% {
+            transform: translateY($height);
+        }
     }
 }
 
 @media only screen and (min-width: 540px) {
+    $height: 360px;
+
     .camera-video {
         width: 480px;
-        height: 360px;
+        height: $height;
+    }
+
+    @keyframes scanning {
+        100% {
+            transform: translateY($height);
+        }
     }
 }
 
 @media only screen and (min-width: 768px) {
+    $height: 480px;
+
     .camera-video {
         width: 640px;
-        height: 480px;
+        height: $height;
+    }
+
+    @keyframes scanning {
+        100% {
+            transform: translateY($height);
+        }
     }
 }
 
@@ -63,11 +87,5 @@
     width: inherit;
     height: 2px;
     background: linear-gradient(to bottom, colors.$scan-line-background, transparent);
-    animation: scanning 2s linear infinite;
-}
-
-@keyframes scanning {
-    100% {
-        top: 100%;
-    }
+    animation: scanning 2s linear infinite alternate;
 }
