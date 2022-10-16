@@ -33,6 +33,15 @@
     display: flex;
     background: black;
     position: relative;
+
+    video {
+        mask-image: radial-gradient(white, black);
+        backface-visibility: hidden;
+
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+    }
 }
 
 @media only screen and (min-width: 375px) {
