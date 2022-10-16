@@ -35,7 +35,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
     @ViewChild('cameraVideo', {static: true}) cameraVideoRef: ElementRef<HTMLVideoElement>;
     @ViewChild('cameraCanvas', {static: true}) cameraCanvasRef: ElementRef<HTMLCanvasElement>;
 
-    frontCamera = true;
+    frontCamera = false;
     scanning: boolean;
     scanData: string;
     cameraStream: MediaStream;

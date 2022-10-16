@@ -33,11 +33,6 @@
     display: flex;
     background: black;
     position: relative;
-
-    video {
-        appearance: none;
-        -webkit-appearance: none;
-    }
 }
 
 @media only screen and (min-width: 375px) {
