@@ -35,12 +35,8 @@
     position: relative;
 
     video {
-        mask-image: radial-gradient(white, black);
-        backface-visibility: hidden;
-
-        -webkit-mask-image: -webkit-radial-gradient(white, black);
-        -webkit-backface-visibility: hidden;
-        -moz-backface-visibility: hidden;
+        appearance: none;
+        -webkit-appearance: none;
     }
 }
 
