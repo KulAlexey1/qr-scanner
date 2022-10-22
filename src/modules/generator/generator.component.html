@@ -1,1 +1,12 @@
-<p>qr-generator works!</p>
+<div #qrcodeContainer class="qrcode-container"></div>
+
+<section class="fields">
+    <div class="data-field">
+        <mat-form-field appearance="outline" class="data">
+            <mat-label>{{ dataLabel }}</mat-label>
+            <textarea matInput [maxlength]="dataMaxlength"
+                [ngModel]="data" (ngModelChange)="onDataChange($event)"></textarea>
+            <mat-hint align="end">{{data.length}}/{{dataMaxlength}}</mat-hint>
+        </mat-form-field>
+    </div>
+</section>

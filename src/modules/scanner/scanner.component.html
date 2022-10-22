@@ -15,7 +15,8 @@
     <div class="data-field">
         <mat-form-field appearance="outline" class="data">
             <mat-label>Данные</mat-label>
-            <textarea matInput [(ngModel)]="scanData"></textarea>
+            <textarea matInput [(ngModel)]="scanData" maxlength="500"></textarea>
+            <mat-hint align="end">{{scanData.length}}/{{scanDataMaxLength}}</mat-hint>
         </mat-form-field>
         <button mat-icon-button matTooltip="Скопировать в буфер обмена" class="copy-btn"
                 [cdkCopyToClipboard]="scanData">

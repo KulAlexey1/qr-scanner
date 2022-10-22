@@ -9,10 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { NotificationService } from '@qr/shared';
-import { ScanUtils } from '@qr/utils/scan';
+import { NotificationService, Constants } from '@qr/shared';
+import { QRUtils } from '@qr/modules/utils/qr';
 
-import { catchError, delayWhen, interval, map, of, repeat, shareReplay, Subscription } from 'rxjs';
+import { catchError, delayWhen, interval, map, repeat, shareReplay, Subscription } from 'rxjs';
 import { MediaDeviceService } from './services';
 
 @Component({
@@ -37,8 +37,9 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
     frontCamera = false;
     scanning: boolean;
-    scanData: string;
+    scanData = '';
     cameraStream: MediaStream;
+    scanDataMaxLength = Constants.qrDataMaxLength;
 
     private playVideoSubscription: Subscription;
 
@@ -85,7 +86,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
     }
 
     private scan(): string {
-        const scanResult = ScanUtils.scanFromVideo(this.cameraVideoRef.nativeElement,
+        const scanResult = QRUtils.scanCodeFromVideo(this.cameraVideoRef.nativeElement,
             this.cameraCanvasRef.nativeElement, true);
 
         if (scanResult) {

@@ -1,0 +1,40 @@
+:host {
+    align-self: center;
+}
+
+.fields {
+    .data-field {
+        display: flex;
+
+        .data {
+            flex-grow: 1;
+        }
+    }
+}
+
+@media only screen and (min-width: 375px) and (min-height: 375px) {
+    $side: 320px;
+
+    .qrcode-container {
+        width: $side;
+        height: $side;
+    }
+}
+
+@media only screen and (min-width: 540px) and (min-height: 540px) {
+    $side: 480px;
+
+    .qrcode-container {
+        width: $side;
+        height: $side;
+    }
+}
+
+@media only screen and (min-width: 768px) and (min-height: 768px) {
+    $side: 560px;
+
+    .qrcode-container {
+        width: $side;
+        height: $side;
+    }
+}

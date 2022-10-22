@@ -1,7 +1,8 @@
 import jsQR from 'jsqr';
+import QRCode from 'qrcode-svg';
 
-export class ScanUtils {
-    public static scanFromVideo(
+export class QRUtils {
+    public static scanCodeFromVideo(
         videoElement: HTMLVideoElement,
         canvasElement: HTMLCanvasElement,
         willScanFrequently: boolean
@@ -19,5 +20,15 @@ export class ScanUtils {
         const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
 
         return qrCode?.data;
+    }
+
+    public static generateCode(data: string): string {
+        const qrcode = new QRCode({
+            content: data,
+            container: 'svg-viewbox', //Responsive use
+            join: true //Crisp rendering and 4-5x reduced file size
+        });
+
+        return qrcode.svg();
     }
 }
