@@ -1,7 +1,8 @@
 @use 'src/styles/colors.scss' as colors;
+@use 'src/styles/component-mixins.scss' as component-mixins;
 
 :host {
-    align-self: center;
+    @include component-mixins.card-component();
 }
 
 .header {

@@ -9,4 +9,9 @@
 @include snackbar.theme(custom-theme.$custom-theme);
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+    background-image: url('./assets/background.jpg');
+    background-size: cover;
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

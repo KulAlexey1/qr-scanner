@@ -1,12 +1,50 @@
 <div #qrcodeContainer class="qrcode-container"></div>
 
 <section class="fields">
-    <div class="data-field">
-        <mat-form-field appearance="outline" class="data">
+    <div class="field-container">
+        <mat-form-field appearance="outline" class="field">
             <mat-label>{{ dataLabel }}</mat-label>
-            <textarea matInput [maxlength]="dataMaxlength"
-                [ngModel]="data" (ngModelChange)="onDataChange($event)"></textarea>
+            <textarea matInput rows="3" 
+                [maxlength]="dataMaxlength"
+                [ngModel]="data"
+                (ngModelChange)="onDataChange($event)"></textarea>
+            <mat-icon matSuffix *ngIf="!encryptionEnabled">qr_code</mat-icon>
             <mat-hint align="end">{{data.length}}/{{dataMaxlength}}</mat-hint>
+        </mat-form-field>
+        
+    </div>
+    
+    <div class="field-container">
+        <mat-slide-toggle color="accent" class="enable-encryption field"
+                [ngModel]="encryptionEnabled"
+                (toggleChange)="onEncryptionToggle()">
+            Шифрование
+        </mat-slide-toggle>
+    </div>
+
+    <div class="field-container">
+        <mat-form-field appearance="outline" class="field">
+            <mat-label>Секретная фраза</mat-label>
+            <textarea matInput rows="3"
+                [maxlength]="secretKeyMaxlength"
+                [disabled]="!encryptionEnabled"
+                [ngModel]="secretPhrase"
+                (ngModelChange)="onSecretPhraseChange($event)">
+            </textarea>
+            <mat-hint align="end">{{secretPhrase.length}}/{{secretKeyMaxlength}}</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div class="field-container">
+        <mat-form-field appearance="outline" class="field">
+            <mat-label>Шифр</mat-label>
+            <textarea matInput rows="3"
+                disabled="true"
+                [maxlength]="cipherTextMaxlength"
+                [ngModel]="cipherText">
+            </textarea>
+            <mat-icon matSuffix *ngIf="encryptionEnabled">qr_code</mat-icon>
+            <mat-hint align="end">{{cipherText.length}}/{{cipherTextMaxlength}}</mat-hint>
         </mat-form-field>
     </div>
 </section>

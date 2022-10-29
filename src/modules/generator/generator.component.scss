@@ -1,40 +1,26 @@
+@use 'src/styles/component-mixins.scss' as component-mixins;
+
 :host {
-    align-self: center;
+    @include component-mixins.card-component();
 }
 
 .fields {
-    .data-field {
+    .field-container {
         display: flex;
 
-        .data {
+        .field {
             flex-grow: 1;
+        }
+
+        .enable-encryption {
+            margin-bottom: 5px;
         }
     }
 }
 
-@media only screen and (min-width: 375px) and (min-height: 375px) {
+.qrcode-container {
     $side: 320px;
 
-    .qrcode-container {
-        width: $side;
-        height: $side;
-    }
-}
-
-@media only screen and (min-width: 540px) and (min-height: 540px) {
-    $side: 480px;
-
-    .qrcode-container {
-        width: $side;
-        height: $side;
-    }
-}
-
-@media only screen and (min-width: 768px) and (min-height: 768px) {
-    $side: 560px;
-
-    .qrcode-container {
-        width: $side;
-        height: $side;
-    }
+    width: $side;
+    height: $side;
 }
