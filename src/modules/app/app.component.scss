@@ -5,8 +5,11 @@
 }
 
 .header-menu {
-    display: flex;
-    justify-content: space-between;
+    .mat-toolbar-row {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+    }
 }
 
 .body {
