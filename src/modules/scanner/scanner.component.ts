@@ -10,7 +10,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NotificationService, Constants } from '@qr/shared';
-import { QRUtils } from '@qr/modules/utils/qr';
+import { QRUtils } from '@qr/utils/qr';
+import { EncryptionUtils } from '@qr/utils/encryption';
 
 import { catchError, delayWhen, interval, map, repeat, shareReplay, Subscription } from 'rxjs';
 import { MediaDeviceService } from './services';
@@ -37,9 +38,15 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
     frontCamera = false;
     scanning: boolean;
-    scanData = '';
+    data = '';
+    secretPhrase = '';
+    cipherText = '';
+    decryptionEnabled = false;
+
     cameraStream: MediaStream;
-    scanDataMaxLength = Constants.qrDataMaxLength;
+    dataMaxLength = Constants.qrDataMaxLength;
+    secretKeyMaxlength = Constants.secretKeyMaxLength;
+    cipherTextMaxlength = Constants.cipherTextMaxLength;
 
     private playVideoSubscription: Subscription;
 
@@ -53,19 +60,46 @@ export class ScannerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this.playVideoSubscription) {
-            this.playVideoSubscription.unsubscribe();
-        }
+        this.disposeCameraStream();
     }
 
     onRefresh() {
         this.startScanning();
     }
+    
+    onDecryptionToggle() {
+        this.decryptionEnabled = !this.decryptionEnabled;
 
-    private startScanning() {
+        if (!this.decryptionEnabled) {
+            this.data = this.cipherText;
+            this.cipherText = '';
+        }
+
+        if (this.decryptionEnabled) {
+            this.cipherText = this.data;
+            this.setDecryptedData();
+        }
+    }
+
+    onSecretPhraseChange(newSecretPhrase: string) {
+        this.secretPhrase = newSecretPhrase;
+
+        this.setDecryptedData();
+    }
+
+    private setDecryptedData() {
+        const decryptedData = EncryptionUtils.decrypt(this.cipherText, this.secretPhrase);
+        this.data = decryptedData ? decryptedData : 'Не удалось расшифровать';
+    }
+
+    private disposeCameraStream() {
         if (this.playVideoSubscription) {
             this.playVideoSubscription.unsubscribe();
         }
+    }
+
+    private startScanning() {
+        this.disposeCameraStream();
 
         this.playVideoSubscription = this.playVideoFromCamera().pipe(
             shareReplay(1),
@@ -88,10 +122,17 @@ export class ScannerComponent implements OnInit, OnDestroy {
     private scan(): string {
         const scanResult = QRUtils.scanCodeFromVideo(this.cameraVideoRef.nativeElement,
             this.cameraCanvasRef.nativeElement, true);
+    
+        if (scanResult && this.decryptionEnabled) {
+            this.cipherText = scanResult;
+            this.setDecryptedData();
+        }
 
+        if (scanResult && !this.decryptionEnabled) {
+            this.data = scanResult;
+        }
+ 
         if (scanResult) {
-            this.scanData = scanResult;
-
             this.notificationService.success('QR-код отсканирован!');
         }
 

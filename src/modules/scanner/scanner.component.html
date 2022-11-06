@@ -12,15 +12,54 @@
 </section>
 
 <section class="fields">
-    <div class="data-field">
-        <mat-form-field appearance="outline" class="data">
+    <div class="field-container">
+        <mat-form-field appearance="outline" class="field">
             <mat-label>Данные</mat-label>
-            <textarea matInput [(ngModel)]="scanData" maxlength="500"></textarea>
-            <mat-hint align="end">{{scanData.length}}/{{scanDataMaxLength}}</mat-hint>
+            <textarea matInput rows="3" 
+                [(ngModel)]="data"
+                maxlength="500"
+                disabled>
+            </textarea>
+            <mat-icon matSuffix *ngIf="!decryptionEnabled">qr_code</mat-icon>
+            <mat-hint align="end">{{data.length}}/{{dataMaxLength}}</mat-hint>
         </mat-form-field>
         <button mat-icon-button matTooltip="Скопировать в буфер обмена" class="copy-btn"
-                [cdkCopyToClipboard]="scanData">
+                [cdkCopyToClipboard]="data">
             <mat-icon>content_copy</mat-icon>
         </button>
+    </div>
+
+    <div class="field-container">
+        <mat-slide-toggle color="accent" class="enable-decryption field"
+                [ngModel]="decryptionEnabled"
+                (toggleChange)="onDecryptionToggle()">
+            Расшифрование
+        </mat-slide-toggle>
+    </div>
+
+    <div class="field-container">
+        <mat-form-field appearance="outline" class="field">
+            <mat-label>Секретная фраза</mat-label>
+            <textarea matInput rows="3"
+                [maxlength]="secretKeyMaxlength"
+                [disabled]="!decryptionEnabled"
+                [ngModel]="secretPhrase"
+                (ngModelChange)="onSecretPhraseChange($event)">
+            </textarea>
+            <mat-hint align="end">{{secretPhrase.length}}/{{secretKeyMaxlength}}</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div class="field-container">
+        <mat-form-field appearance="outline" class="field">
+            <mat-label>Шифр</mat-label>
+            <textarea matInput rows="3"
+                disabled
+                [maxlength]="cipherTextMaxlength"
+                [ngModel]="cipherText">
+            </textarea>
+            <mat-icon matSuffix *ngIf="decryptionEnabled">qr_code</mat-icon>
+            <mat-hint align="end">{{cipherText.length}}/{{cipherTextMaxlength}}</mat-hint>
+        </mat-form-field>
     </div>
 </section>

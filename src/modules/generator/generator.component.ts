@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { QRUtils } from '@qr/modules/utils/qr';
-import { EncryptionUtils } from '@qr/modules/utils/encryption';
+import { QRUtils } from '@qr/utils/qr';
+import { EncryptionUtils } from '@qr/utils/encryption';
 import { Constants } from '@qr/shared';
 
 @Component({
@@ -53,8 +53,7 @@ export class GeneratorComponent implements OnInit {
         this.data = newData;
 
         if (this.encryptionEnabled) {
-            this.generateCipherText();
-            this.generateCode(this.cipherText);
+            this.generateCipherWithCode();
         } else {
             this.generateCode(this.data);
         }
@@ -68,23 +67,33 @@ export class GeneratorComponent implements OnInit {
 
         this.secretPhrase = newSecretPhrase;
 
-        this.generateCipherText();
-        this.generateCode(this.cipherText);
+        this.generateCipherWithCode();
     }
 
     onEncryptionToggle() {
         this.encryptionEnabled = !this.encryptionEnabled;
         
         if (this.encryptionEnabled) {
-            this.generateCipherText();
-            this.generateCode(this.cipherText);
+            this.generateCipherWithCode();
         } else {
             this.generateCode(this.data);
         }
     }
 
+    private generateCipherWithCode() {
+        this.generateCipherText();
+        this.generateCode(this.cipherText);
+    }
+
     private generateCipherText() {
-        this.cipherText = EncryptionUtils.encrypt(this.data, this.secretPhrase);
+        const encryptedText = EncryptionUtils.encrypt(this.data, this.secretPhrase);
+        const decryptedText = EncryptionUtils.decrypt(encryptedText, this.secretPhrase);
+
+        if (decryptedText !== this.data) {
+            this.cipherText = 'Не удалось зашифровать';
+        } else {
+            this.cipherText = encryptedText;
+        }
     }
 
     private generateCode(data: string) {
