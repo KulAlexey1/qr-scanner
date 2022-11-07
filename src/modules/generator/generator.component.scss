@@ -4,6 +4,12 @@
     @include component-mixins.card-component();
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
 .fields {
     .field-container {
         display: flex;
@@ -19,7 +25,7 @@
 }
 
 .qrcode-container {
-    $side: 320px;
+    $side: 280px;
 
     width: $side;
     height: $side;

@@ -8,6 +8,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { QRUtils } from '@qr/utils/qr';
 import { EncryptionUtils } from '@qr/utils/encryption';
+import { SvgUtils } from '@qr/modules/utils/svg';
 import { Constants } from '@qr/shared';
 
 @Component({
@@ -78,6 +79,11 @@ export class GeneratorComponent implements OnInit {
         } else {
             this.generateCode(this.data);
         }
+    }
+
+    onOpenQrInNewTab() {
+        const qrSvg = this.qrcodeContainerRef.nativeElement.querySelector('svg');
+        SvgUtils.openSvgInNewTab(qrSvg, 250, 250);
     }
 
     private generateCipherWithCode() {
