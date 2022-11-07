@@ -83,7 +83,7 @@ export class GeneratorComponent implements OnInit {
 
     onOpenQrInNewTab() {
         const qrSvg = this.qrcodeContainerRef.nativeElement.querySelector('svg');
-        SvgUtils.openSvgInNewTab(qrSvg, 250, 250);
+        SvgUtils.openSvgInNewTab(qrSvg);
     }
 
     private generateCipherWithCode() {
