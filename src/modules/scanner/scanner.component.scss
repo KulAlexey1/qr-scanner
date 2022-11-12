@@ -7,12 +7,14 @@
 
 .header {
     display: flex;
-    gap: 15px;
+    flex-direction: row;
     align-items: center;
+    gap: 15px;
 }
 
 .header,
-.camera-video {
+.camera-video,
+.img-container {
     margin-bottom: 15px;
 }
 
@@ -34,15 +36,25 @@
     }
 }
 
-.camera-video {
-    $height: 240px;
+$imgHeight: 240px;
 
+.camera-video, .img {
+    height: $imgHeight;
+    width: 320px;
+}
+
+.camera-video {
+    @keyframes scanning {
+        100% {
+            transform: translateY($imgHeight);
+        }
+    }
+}
+
+.camera-video {
     display: flex;
     background: black;
     position: relative;
-    
-    width: 320px;
-    height: $height;
 
     &.scanning::after {
         content: '';
@@ -56,11 +68,5 @@
 
     video {
         object-fit: cover;
-    }
-
-    @keyframes scanning {
-        100% {
-            transform: translateY($height);
-        }
-    }
+    }    
 }

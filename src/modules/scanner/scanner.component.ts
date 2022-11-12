@@ -35,6 +35,7 @@ import { MediaDeviceService } from './services';
 export class ScannerComponent implements OnInit, OnDestroy {
     @ViewChild('cameraVideo', {static: true}) cameraVideoRef: ElementRef<HTMLVideoElement>;
     @ViewChild('cameraCanvas', {static: true}) cameraCanvasRef: ElementRef<HTMLCanvasElement>;
+    @ViewChild('imgCanvas', {static: true}) imgCanvasRef: ElementRef<HTMLCanvasElement>;
 
     frontCamera = false;
     scanning: boolean;
@@ -42,6 +43,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
     secretPhrase = '';
     cipherText = '';
     decryptionEnabled = false;
+    isImgSelected = false;
 
     cameraStream: MediaStream;
     dataMaxLength = Constants.qrDataMaxLength;
@@ -60,11 +62,40 @@ export class ScannerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.disposeCameraStream();
+        this.stopCameraStream();
     }
 
     onRefresh() {
         this.startScanning();
+        this.isImgSelected = false;
+    }
+
+    onImgSelect(event: Event) {
+        const element = event.currentTarget as HTMLInputElement;
+        const fileList: FileList = element.files;
+
+        if (fileList.length == 0)
+            return;
+
+        const file = fileList[0];        
+        
+        const scanResult$ = QRUtils.scanCodeFromImgFile(file,
+            this.imgCanvasRef.nativeElement, false);
+
+        scanResult$.subscribe(
+            (scanResult) => {
+                this.setScanResult(scanResult);
+
+                element.value = '';
+                this.stopCameraStream();
+                this.isImgSelected = true;
+        
+                if (!scanResult) {
+                    this.resetDataAndCipher();
+                }
+            },
+            (err) => this.resetDataAndCipher() 
+        );
     }
     
     onDecryptionToggle() {
@@ -92,14 +123,14 @@ export class ScannerComponent implements OnInit, OnDestroy {
         this.data = decryptedData ? decryptedData : 'Не удалось расшифровать';
     }
 
-    private disposeCameraStream() {
+    private stopCameraStream() {
         if (this.playVideoSubscription) {
             this.playVideoSubscription.unsubscribe();
         }
     }
 
     private startScanning() {
-        this.disposeCameraStream();
+        this.stopCameraStream();
 
         this.playVideoSubscription = this.playVideoFromCamera().pipe(
             shareReplay(1),
@@ -110,6 +141,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
             }),
             catchError((err) => {
                 this.scanning = false;
+                this.resetDataAndCipher();
 
                 throw err;
             }),
@@ -119,10 +151,16 @@ export class ScannerComponent implements OnInit, OnDestroy {
         ).subscribe();
     }
 
-    private scan(): string {
+    private scan() {
         const scanResult = QRUtils.scanCodeFromVideo(this.cameraVideoRef.nativeElement,
             this.cameraCanvasRef.nativeElement, true);
     
+        this.setScanResult(scanResult);
+
+        return scanResult;
+    }
+
+    private setScanResult(scanResult: string) {
         if (scanResult && this.decryptionEnabled) {
             this.cipherText = scanResult;
             this.setDecryptedData();
@@ -135,8 +173,11 @@ export class ScannerComponent implements OnInit, OnDestroy {
         if (scanResult) {
             this.notificationService.success('QR-код отсканирован!');
         }
+    }
 
-        return scanResult;
+    private resetDataAndCipher() {
+        this.data = '';
+        this.cipherText = '';
     }
 
     private playVideoFromCamera() {
