@@ -82,8 +82,8 @@ export class ScannerComponent implements OnInit, OnDestroy {
         const scanResult$ = QRUtils.scanCodeFromImgFile(file,
             this.imgCanvasRef.nativeElement, false);
 
-        scanResult$.subscribe(
-            (scanResult) => {
+        scanResult$.subscribe({
+            next: (scanResult) => {
                 this.setScanResult(scanResult);
 
                 element.value = '';
@@ -94,8 +94,11 @@ export class ScannerComponent implements OnInit, OnDestroy {
                     this.resetDataAndCipher();
                 }
             },
-            (err) => this.resetDataAndCipher() 
-        );
+            error: (err) => {
+                this.resetDataAndCipher();
+                console.error(err);
+            } 
+        });
     }
     
     onDecryptionToggle() {

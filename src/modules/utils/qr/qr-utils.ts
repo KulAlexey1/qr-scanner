@@ -36,8 +36,6 @@ export class QRUtils {
             img.src = url;
 
             img.onload = () => {
-                URL.revokeObjectURL(img.src);
-
                 const canvas2dContext = canvasElement.getContext('2d',
                     { willReadFrequently: willScanFrequently }) as CanvasRenderingContext2D;
 
@@ -46,6 +44,8 @@ export class QRUtils {
 
                 const imageData = canvas2dContext.getImageData(0, 0, img.width, img.height);
                 const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+
+                URL.revokeObjectURL(img.src);
 
                 observer.next(qrCode?.data);
                 observer.complete();

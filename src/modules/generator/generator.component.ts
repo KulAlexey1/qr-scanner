@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { QRUtils } from '@qr/utils/qr';
 import { EncryptionUtils } from '@qr/utils/encryption';
@@ -19,7 +20,8 @@ import { Constants } from '@qr/shared';
         MatButtonModule,
         MatIconModule,
         MatInputModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatTooltipModule
     ],
     selector: 'qr-generator',
     templateUrl: './generator.component.html',
@@ -30,7 +32,13 @@ export class GeneratorComponent implements OnInit {
 
     dataLabel = 'Данные';
 
+    dataPlaceholder = 'google.com';
     data = '';
+    
+    get dataToGenerateQR() {
+        return this.data ? this.data : this.dataPlaceholder;
+    }
+
     secretPhrase = '';
     cipherText = '';
     encryptionEnabled = false;
@@ -42,7 +50,7 @@ export class GeneratorComponent implements OnInit {
     constructor() { }
 
     ngOnInit(): void {
-        this.generateCode(this.dataLabel);
+        this.generateCode(this.dataToGenerateQR);
     }
 
     onDataChange(newData: string) {
@@ -56,7 +64,7 @@ export class GeneratorComponent implements OnInit {
         if (this.encryptionEnabled) {
             this.generateCipherWithCode();
         } else {
-            this.generateCode(this.data);
+            this.generateCode(this.dataToGenerateQR);
         }
     }
 
@@ -77,8 +85,19 @@ export class GeneratorComponent implements OnInit {
         if (this.encryptionEnabled) {
             this.generateCipherWithCode();
         } else {
-            this.generateCode(this.data);
+            this.generateCode(this.dataToGenerateQR);
         }
+    }
+
+    onSaveQr() {
+        const qrSvg = this.qrcodeContainerRef.nativeElement.querySelector('svg');
+
+        const qrText = this.encryptionEnabled ? this.cipherText : this.dataToGenerateQR;
+        const fileName = 'QR-' + qrText;
+        
+        SvgUtils.saveSvgAsPng(qrSvg, fileName).subscribe({
+            error: (err) => console.error(err)
+        });
     }
 
     onOpenQrInNewTab() {
@@ -92,10 +111,10 @@ export class GeneratorComponent implements OnInit {
     }
 
     private generateCipherText() {
-        const encryptedText = EncryptionUtils.encrypt(this.data, this.secretPhrase);
+        const encryptedText = EncryptionUtils.encrypt(this.dataToGenerateQR, this.secretPhrase);
         const decryptedText = EncryptionUtils.decrypt(encryptedText, this.secretPhrase);
 
-        if (decryptedText !== this.data) {
+        if (decryptedText !== this.dataToGenerateQR) {
             this.cipherText = 'Не удалось зашифровать';
         } else {
             this.cipherText = encryptedText;

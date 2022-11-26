@@ -1,5 +1,11 @@
 <section class="header">
-    <button mat-icon-button color="accent" class="align-center" (click)="onOpenQrInNewTab()">
+    <button mat-icon-button class="align-center" matTooltip="Скачать QR-код в формате PNG"
+            (click)="onSaveQr()">
+        <mat-icon>save_alt</mat-icon>
+    </button>
+
+    <button mat-icon-button class="align-center" matTooltip="Открыть QR-код в новой вкладке"
+            (click)="onOpenQrInNewTab()">
         <mat-icon>open_in_new</mat-icon>
     </button>
 </section>
@@ -8,9 +14,10 @@
 
 <section class="fields">
     <div class="field-container">
-        <mat-form-field appearance="outline" class="field">
+        <mat-form-field appearance="outline" class="field" floatLabel="always">
             <mat-label>{{ dataLabel }}</mat-label>
-            <textarea matInput rows="3" 
+            <textarea matInput rows="3"
+                [placeholder]="dataPlaceholder"
                 [maxlength]="dataMaxlength"
                 [ngModel]="data"
                 (ngModelChange)="onDataChange($event)"></textarea>
