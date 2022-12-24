@@ -10,8 +10,9 @@
 
 html, body { height: 100%; }
 body {
-    background-image: url('./assets/background.jpg');
-    background-size: cover;
+    background: rgb(240,237,255);
+    background: linear-gradient(90deg, rgba(240,237,255,1) 0%, rgba(137,135,188,1) 50%, rgba(240,237,255,1) 100%);
+
     margin: 0; 
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
